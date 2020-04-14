@@ -9,7 +9,7 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
 
-export_file_url = 'https://www.dropbox.com/s/e9n7dxfxdstju2r/stage-2.pth?dl=1'
+export_file_url = 'https://www.dropbox.com/s/wwlnzzko6hxk1w7/export.pkl?dl=1'
 export_file_name = 'export.pkl'
 
 classes = ['croissant', 'kouign_amann', 'pain_au_chocolat']
@@ -32,6 +32,7 @@ async def download_file(url, dest):
 async def setup_learner():
     await download_file(export_file_url, path / export_file_name)
     try:
+        defaults.device = torch.device('cpu')
         learn = load_learner(path, export_file_name)
         return learn
     except RuntimeError as e:
